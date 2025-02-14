@@ -4,22 +4,20 @@ use std::{process, thread};
 
 use glfw::{fail_on_errors, Context, WindowHint};
 
+use opengl::*;
+
 const TRIANGLE: [f32; 18] = [
     0.00, 0.50, 0.0, /* Pos|Color */ 1.0, 0.0, 0.0, // 0
     0.50, -0.5, 0.0, /* Pos|Color */ 0.0, 1.0, 0.0, // 1
     -0.5, -0.5, 0.0, /* Pos|Color */ 0.0, 0.0, 1.0, // 2
 ];
 
-pub fn load_triangle_shader(
-    context: &opengl::Context,
-    v_code: &str,
-    f_code: &str,
-) -> opengl::Program {
-    let vs = context.new_shader(opengl::ShaderType::Vertex);
+pub fn load_triangle_shader(context: &opengl::Context, v_code: &str, f_code: &str) -> Program {
+    let vs = context.new_shader(ShaderType::Vertex);
     vs.source(v_code);
     vs.compile().unwrap();
 
-    let fs = context.new_shader(opengl::ShaderType::Fragmet);
+    let fs = context.new_shader(ShaderType::Fragmet);
     fs.source(f_code);
     fs.compile().unwrap();
 
@@ -30,13 +28,13 @@ pub fn load_triangle_shader(
     program
 }
 
-pub fn load_triangle_buffer(context: &opengl::Context) -> opengl::Vertex {
-    let mut vertex = opengl::Vertex::new(context);
+pub fn load_triangle_buffer(context: &opengl::Context) -> Vertex {
+    let mut vertex = Vertex::new(context);
     vertex.new_buffer(|vbo| {
-        vbo.bind(opengl::Target::Array);
-        vbo.data(opengl::Target::Array, &TRIANGLE, opengl::Usage::StaticDraw);
+        vbo.bind(Target::Array);
+        vbo.data(Target::Array, &TRIANGLE, Usage::StaticDraw);
 
-        opengl::Buffer::gen_mark(&[(opengl::GlType::f32, 3); 2]);
+        Buffer::gen_mark(&[(GlType::f32, 3); 2]);
     });
 
     vertex
@@ -51,22 +49,18 @@ const SQUARE: [f32; 24] = [
 
 const SQUARE_INDICES: [u32; 6] = [0, 1, 2, 0, 2, 3];
 
-pub fn load_square_buffer(context: &opengl::Context) -> opengl::Vertex {
-    let mut vertex = opengl::Vertex::new(context);
+pub fn load_square_buffer(context: &opengl::Context) -> Vertex {
+    let mut vertex = Vertex::new(context);
     vertex.new_buffer(|vbo| {
-        vbo.bind(opengl::Target::Array);
-        vbo.data(opengl::Target::Array, &SQUARE, opengl::Usage::StaticDraw);
+        vbo.bind(Target::Array);
+        vbo.data(Target::Array, &SQUARE, Usage::StaticDraw);
 
-        opengl::Buffer::gen_mark(&[(opengl::GlType::f32, 3); 2]);
+        Buffer::gen_mark(&[(GlType::f32, 3); 2]);
     });
 
     vertex.new_buffer(|ebo| {
-        ebo.bind(opengl::Target::ElementArray);
-        ebo.data(
-            opengl::Target::ElementArray,
-            &SQUARE_INDICES,
-            opengl::Usage::StaticDraw,
-        );
+        ebo.bind(Target::ElementArray);
+        ebo.data(Target::ElementArray, &SQUARE_INDICES, Usage::StaticDraw);
     });
 
     vertex
@@ -82,8 +76,8 @@ fn main() {
     };
 
     glfw.window_hint(WindowHint::ContextVersion(
-        opengl::OPENGL_VERSION.0,
-        opengl::OPENGL_VERSION.1,
+        OPENGL_VERSION.0,
+        OPENGL_VERSION.1,
     ));
 
     let result = glfw.create_window(640, 480, "GLE", glfw::WindowMode::Windowed);
@@ -97,7 +91,6 @@ fn main() {
     window.set_all_polling(true);
 
     let handle = thread::spawn(move || {
-
         window.make_current();
         let context = opengl::Context::new(|s| window.get_proc_address(s));
 
@@ -113,7 +106,7 @@ fn main() {
             context.view_port(0, 0, width, height);
 
             context.clear_color(0.3, 0.6, 0.6, 1.0);
-            context.clear(opengl::Mask::COLOR_BUFFER_BIT);
+            context.clear(Mask::COLOR_BUFFER_BIT);
 
             program.using();
             program
@@ -123,7 +116,7 @@ fn main() {
                 )
                 .unwrap();
             triangle.using();
-            context.draw_arrays(opengl::Mode::Triangles, 0, 3);
+            context.draw_arrays(Mode::Triangles, 0, 3);
 
             program
                 .set_uniform(
@@ -131,7 +124,7 @@ fn main() {
                     &mats::translate3(mats::Vec3::from([[-0.5, -0.5, 0.0]])),
                 )
                 .unwrap();
-            context.draw_arrays(opengl::Mode::Triangles, 0, 3);
+            context.draw_arrays(Mode::Triangles, 0, 3);
 
             program
                 .set_uniform(
@@ -140,7 +133,7 @@ fn main() {
                 )
                 .unwrap();
             square.using();
-            context.draw_elements(opengl::Mode::Triangles, 6, opengl::GlType::u32, 0);
+            context.draw_elements(Mode::Triangles, 6, GlType::u32, 0);
 
             program
                 .set_uniform(
@@ -148,7 +141,7 @@ fn main() {
                     &mats::translate3(mats::Vec3::from([[-0.5, 0.5, 0.0]])),
                 )
                 .unwrap();
-            context.draw_elements(opengl::Mode::Triangles, 6, opengl::GlType::u32, 0);
+            context.draw_elements(Mode::Triangles, 6, GlType::u32, 0);
 
             window.swap_buffers();
         }
