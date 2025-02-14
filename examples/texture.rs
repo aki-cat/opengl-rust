@@ -3,7 +3,6 @@
 use std::{process, sync::mpsc::channel, thread};
 
 use glfw::{fail_on_errors, Context, WindowHint};
-use logthis::{debug, error, Level, Log};
 
 use opengl::*;
 
@@ -80,13 +79,9 @@ pub fn load_texture(context: &opengl::Context) -> Texture {
 }
 
 fn main() {
-    Log::set_level(Level::Debug);
-    Log::set_current_thread_name("MainThread");
-    debug!("Created Main Thread");
-
     let mut glfw = match glfw::init(fail_on_errors!()) {
         Err(_) => {
-            error!("Failed to initialize program");
+            eprintln!("Failed to initialize program");
             process::exit(1);
         }
         Ok(glfw) => glfw,
@@ -102,7 +97,7 @@ fn main() {
     let (mut window, events) = if let Some(some) = result {
         some
     } else {
-        error!("Failed to create window");
+        eprintln!("Failed to create window");
         process::exit(1);
     };
 
@@ -111,11 +106,8 @@ fn main() {
     let (tx, rx) = channel();
     let (tx2, rx2) = channel();
     let handle = thread::spawn(move || {
-        Log::set_current_thread_name("RenderThread");
-        debug!("Created Render Thread");
-
         window.make_current();
-        debug!("Initializing...");
+
         let context = opengl::Context::new(|s| window.get_proc_address(s));
         let tex = load_texture(&context);
         let image = load_buffer(&context);
@@ -142,17 +134,14 @@ fn main() {
 
             window.swap_buffers();
         }
-        debug!("Render Thread Exited");
     });
 
     let mut window = rx.recv().unwrap();
-    debug!("Show window");
+
     window.show();
     tx2.send(window).unwrap();
 
     let handle = thread::spawn(move || {
-        Log::set_current_thread_name("PollThread");
-        debug!("Created Poll Thread");
 
         while !handle.is_finished() {
             for (_, event) in glfw::flush_messages(&events) {
@@ -160,7 +149,6 @@ fn main() {
             }
         }
         handle.join().unwrap();
-        debug!("Poll Thread Exited");
     });
 
     while !handle.is_finished() {
@@ -168,5 +156,4 @@ fn main() {
     }
 
     handle.join().unwrap();
-    debug!("Main Thread Exited");
 }

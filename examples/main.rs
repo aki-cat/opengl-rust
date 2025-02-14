@@ -3,7 +3,6 @@
 use std::{process, thread};
 
 use glfw::{fail_on_errors, Context, WindowHint};
-use logthis::{debug, error, Level, Log};
 
 const TRIANGLE: [f32; 18] = [
     0.00, 0.50, 0.0, /* Pos|Color */ 1.0, 0.0, 0.0, // 0
@@ -74,13 +73,9 @@ pub fn load_square_buffer(context: &opengl::Context) -> opengl::Vertex {
 }
 
 fn main() {
-    Log::set_level(Level::Debug);
-    Log::set_current_thread_name("MainThread");
-    debug!("Created Main Thread");
-
     let mut glfw = match glfw::init(fail_on_errors!()) {
         Err(_) => {
-            error!("Failed to initialize program");
+            eprintln!("Failed to initialize program");
             process::exit(1);
         }
         Ok(glfw) => glfw,
@@ -95,15 +90,13 @@ fn main() {
     let (mut window, events) = if let Some(some) = result {
         some
     } else {
-        error!("Failed to create window");
+        eprintln!("Failed to create window");
         process::exit(1);
     };
 
     window.set_all_polling(true);
 
     let handle = thread::spawn(move || {
-        Log::set_current_thread_name("RenderThread");
-        debug!("Created Render Thread");
 
         window.make_current();
         let context = opengl::Context::new(|s| window.get_proc_address(s));
@@ -159,20 +152,15 @@ fn main() {
 
             window.swap_buffers();
         }
-        debug!("Render Thread Exited");
     });
 
     let handle = thread::spawn(move || {
-        Log::set_current_thread_name("PollThread");
-        debug!("Created Poll Thread");
-
         while !handle.is_finished() {
             for (_, event) in glfw::flush_messages(&events) {
                 let _ = event;
             }
         }
         handle.join().unwrap();
-        debug!("Poll Thread Exited");
     });
 
     while !handle.is_finished() {
@@ -180,5 +168,4 @@ fn main() {
     }
 
     handle.join().unwrap();
-    debug!("Main Thread Exited");
 }

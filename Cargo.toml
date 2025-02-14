@@ -10,4 +10,3 @@ mats = { version = "0.1.4", features = ["glsl"] }
 [dev-dependencies]
 glfw = "0.59.0"
 image = "0.25.5"
-logthis = "0.1.0"
