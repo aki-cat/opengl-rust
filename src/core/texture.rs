@@ -32,8 +32,12 @@ pub struct Textures {
 /// Texture objects
 impl Textures {
     pub(super) fn new(count: usize) -> Self {
+        let mut id = Vec::new();
+        unsafe {
+            gl::GenTextures(count as _, id.as_mut_ptr());
+        }
         Self {
-            textures: (0..count).map(|_| Texture::new()).collect(),
+            textures: id.into_iter().map(|id| Texture { id }).collect(),
         }
     }
 
