@@ -126,6 +126,34 @@ impl Context {
         }
     }
 
+    /// Wrapper of `glDepthMask(...)`
+    pub fn depth_mask(&self, mask: bool) {
+        unsafe {
+            gl::DepthMask(mask as _);
+        }
+    }
+
+    /// Wrapper of `glDepthFunc(...)`
+    pub fn depth_func(&self, func: DepthFunc) {
+        unsafe {
+            gl::DepthFunc(func.to_gl_func());
+        }
+    }
+
+    /// Wrapper of `glStencilMask(...)`
+    pub fn stencil_mask(&self, mask: u32) {
+        unsafe {
+            gl::StencilMask(mask);
+        }
+    }
+
+    /// Wrapper of `glStencilFunc(...)`
+    pub fn stencil_func(&self, func: StencilFunc, ref_: i32, mask: u32) {
+        unsafe {
+            gl::StencilFunc(func.to_gl_func(), ref_, mask);
+        }
+    }
+
     /// Wrapper of `glDrawArrays(...)`
     pub fn draw_arrays(&self, mode: Mode, first: i32, count: i32) {
         unsafe {

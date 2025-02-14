@@ -1,9 +1,5 @@
-// #![windows_subsystem = "windows"]
-
 use std::{process, thread};
-
 use glfw::{fail_on_errors, Context, WindowHint};
-
 use opengl::*;
 
 const TRIANGLE: [f32; 18] = [

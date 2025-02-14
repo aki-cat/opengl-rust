@@ -1,9 +1,5 @@
-// #![windows_subsystem = "windows"]
-
 use std::{process, sync::mpsc::channel, thread};
-
 use glfw::{fail_on_errors, Context, WindowHint};
-
 use opengl::*;
 
 const IMAGE: [f32; 20] = [

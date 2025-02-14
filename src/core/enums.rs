@@ -373,6 +373,9 @@ pub enum PixelDataType {
     u32_2_10_10_10_REV,
 }
 
+pub type DepthFunc = CompareFunc;
+pub type StencilFunc = CompareFunc;
+
 impl TexParam {
     const fn swizzle(swizzle: Swizzle) -> i32 {
         match swizzle {
@@ -406,24 +409,9 @@ impl TexParam {
                 }
             },
             TexParam::BaseLevel(level) => TexParamPair::GLi(gl::TEXTURE_BASE_LEVEL, *level),
-            TexParam::CompareFunc(compare_func) => match compare_func {
-                CompareFunc::LessEqual => {
-                    TexParamPair::GLi(gl::TEXTURE_COMPARE_FUNC, gl::LEQUAL as _)
-                }
-                CompareFunc::GreaterEqual => {
-                    TexParamPair::GLi(gl::TEXTURE_COMPARE_FUNC, gl::GEQUAL as _)
-                }
-                CompareFunc::Less => TexParamPair::GLi(gl::TEXTURE_COMPARE_FUNC, gl::LESS as _),
-                CompareFunc::Greater => {
-                    TexParamPair::GLi(gl::TEXTURE_COMPARE_FUNC, gl::GREATER as _)
-                }
-                CompareFunc::Equal => TexParamPair::GLi(gl::TEXTURE_COMPARE_FUNC, gl::EQUAL as _),
-                CompareFunc::NotEqual => {
-                    TexParamPair::GLi(gl::TEXTURE_COMPARE_FUNC, gl::NOTEQUAL as _)
-                }
-                CompareFunc::Always => TexParamPair::GLi(gl::TEXTURE_COMPARE_FUNC, gl::ALWAYS as _),
-                CompareFunc::Never => TexParamPair::GLi(gl::TEXTURE_COMPARE_FUNC, gl::NEVER as _),
-            },
+            TexParam::CompareFunc(compare_func) => {
+                TexParamPair::GLi(gl::TEXTURE_COMPARE_FUNC, compare_func.to_gl_func() as _)
+            }
             TexParam::CompareMode(compare_mode) => match compare_mode {
                 CompareMode::CompareRefToTexture => {
                     TexParamPair::GLi(gl::TEXTURE_COMPARE_MODE, gl::COMPARE_REF_TO_TEXTURE as _)
@@ -796,6 +784,21 @@ impl PixelDataType {
             PixelDataType::u32_8_8_8_8_REV => gl::UNSIGNED_INT_8_8_8_8_REV,
             PixelDataType::u32_10_10_10_2 => gl::UNSIGNED_INT_10_10_10_2,
             PixelDataType::u32_2_10_10_10_REV => gl::UNSIGNED_INT_2_10_10_10_REV,
+        }
+    }
+}
+
+impl CompareFunc {
+    pub(super) const fn to_gl_func(self) -> GLuint {
+        match self {
+            CompareFunc::Never => gl::NEVER,
+            CompareFunc::Less => gl::LESS,
+            CompareFunc::Equal => gl::EQUAL,
+            CompareFunc::LessEqual => gl::LEQUAL,
+            CompareFunc::Greater => gl::GREATER,
+            CompareFunc::NotEqual => gl::NOTEQUAL,
+            CompareFunc::GreaterEqual => gl::GEQUAL,
+            CompareFunc::Always => gl::ALWAYS,
         }
     }
 }
