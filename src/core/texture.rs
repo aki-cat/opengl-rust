@@ -6,6 +6,7 @@ use super::{
     ImageFormat, ImageTarget, InternalFormat, PixelDataType, TexParam, TexParamPair, TexTarget,
 };
 
+/// Texture object
 pub struct Texture {
     id: GLuint,
 }
@@ -28,8 +29,9 @@ pub struct Textures {
     textures: Vec<Texture>,
 }
 
+/// Texture objects
 impl Textures {
-    pub(crate) fn new(count: usize) -> Self {
+    pub(super) fn new(count: usize) -> Self {
         Self {
             textures: (0..count).map(|_| Texture::new()).collect(),
         }
