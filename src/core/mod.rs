@@ -10,6 +10,7 @@ mod context;
 mod enums;
 mod frame_buffer;
 mod program;
+mod render_buffer;
 mod shader;
 mod texture;
 
@@ -19,6 +20,7 @@ pub use context::Context;
 pub use enums::*;
 pub use frame_buffer::{FrameBuffer, FrameBuffers};
 pub use program::Program;
+pub use render_buffer::{RenderBuffer, RenderBuffers};
 pub use shader::Shader;
 pub use texture::{Texture, Textures};
 
