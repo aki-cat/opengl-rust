@@ -228,6 +228,7 @@ impl Context {
         }
     }
 
+    /// Wrapper of `glBlendEquation(...)`
     #[inline]
     pub fn blend_equation(&self, mode: BlendEquation) {
         unsafe {

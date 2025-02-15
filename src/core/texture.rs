@@ -88,19 +88,19 @@ impl IndexMut<usize> for Textures {
 }
 
 impl Texture {
-    /// Warpper of `glBindTexture(...)`
+    /// Wrapper of `glBindTexture(...)`
     #[inline]
     pub fn bind(&self, target: TexTarget) {
         unsafe { gl::BindTexture(target.to_gl_target(), self.id) }
     }
 
-    /// Warpper of `glBindTexture(...)`
+    /// Wrapper of `glBindTexture(...)`
     #[inline]
     pub fn unbind(target: TexTarget) {
         unsafe { gl::BindTexture(target.to_gl_target(), 0) }
     }
 
-    /// Warpper of `glActiveTexture(...)`
+    /// Wrapper of `glActiveTexture(...)`
     #[inline]
     pub fn active(index: u32) {
         unsafe {
@@ -108,7 +108,7 @@ impl Texture {
         }
     }
 
-    /// Warpper of `glTextureParameter{i|f|iv|fv}(...)`
+    /// Wrapper of `glTextureParameter{i|f|iv|fv}(...)`
     #[inline]
     pub fn set(&self, param: TexParam) {
         unsafe {
@@ -126,7 +126,7 @@ impl Texture {
         }
     }
 
-    /// Warpper of `glGenerateTextureMipmap(...)`
+    /// Wrapper of `glGenerateTextureMipmap(...)`
     #[inline]
     pub fn gen_minmap(&self) {
         unsafe {
@@ -134,7 +134,7 @@ impl Texture {
         }
     }
 
-    /// Warpper of `glTexImage2D(...)`
+    /// Wrapper of `glTexImage2D(...)`
     #[inline]
     pub fn load<T>(
         target: ImageTarget,
@@ -168,7 +168,7 @@ impl Texture {
         Err(format!("Load Texture Error: {}({})", err, err_enum))
     }
 
-    /// Warpper of `glTexImage2D(...)` without error check
+    /// Wrapper of `glTexImage2D(...)` without error check
     #[inline]
     pub unsafe fn load_unchecked<T>(
         target: ImageTarget,
@@ -191,7 +191,7 @@ impl Texture {
         );
     }
 
-    /// Warpper of `glFramebufferTexture2D(...)`
+    /// Wrapper of `glFramebufferTexture2D(...)`
     #[inline]
     pub fn attach(
         &self,

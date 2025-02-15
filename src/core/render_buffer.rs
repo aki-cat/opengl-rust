@@ -90,6 +90,7 @@ impl IntoIterator for RenderBuffers {
 }
 
 impl RenderBuffer {
+    /// Wrapper for `glBindRenderBuffer(...)`
     #[inline]
     pub fn bind(&self) {
         unsafe {
@@ -97,6 +98,7 @@ impl RenderBuffer {
         }
     }
 
+    /// Wrapper for `glBindRenderBuffer(...)`
     #[inline]
     pub fn unbind() {
         unsafe {
@@ -104,6 +106,7 @@ impl RenderBuffer {
         }
     }
 
+    /// Wrapper for `glRenderbufferStorage(...)`
     #[inline]
     pub fn storage(format: RenderBufferFormat, (width, height): (u32, u32)) {
         unsafe {

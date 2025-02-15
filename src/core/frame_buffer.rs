@@ -91,6 +91,7 @@ impl IntoIterator for FrameBuffers {
 }
 
 impl FrameBuffer {
+    /// Wrapper of `glBindFramebuffer(...)`
     #[inline]
     pub fn bind(&self, target: FrameBufferTarget) {
         unsafe {
@@ -98,12 +99,16 @@ impl FrameBuffer {
         }
     }
 
+    /// Wrapper of `glBindFramebuffer(...)`
+    #[inline]
     pub fn unbind(target: FrameBufferTarget) {
         unsafe {
             gl::BindFramebuffer(target.to_gl_target(), 0);
         }
     }
 
+    /// Wrapper of `glFramebufferRenderbuffer(...)`
+    #[inline]
     pub fn attach_render_buffer(
         target: FrameBufferTarget,
         attachment: Attachmect,
@@ -116,6 +121,17 @@ impl FrameBuffer {
                 gl::RENDERBUFFER,
                 render_buffer.rbo,
             );
+        }
+    }
+
+    /// Wrapper of `glCheckFramebufferStatus(...)`
+    #[inline]
+    pub fn check_status(target: FrameBufferTarget) -> Result<(), String> {
+        let err = unsafe { gl::CheckFramebufferStatus(target.to_gl_target()) };
+        if err == gl::FRAMEBUFFER_COMPLETE {
+            Ok(())
+        } else {
+            Err(format!("Not complete, error code: {}", err))
         }
     }
 }
