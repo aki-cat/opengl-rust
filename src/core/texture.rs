@@ -12,6 +12,7 @@ pub struct Texture {
 }
 
 impl Texture {
+    #[inline]
     pub(crate) fn new() -> Self {
         let mut id = 0;
         unsafe { gl::GenTextures(1, &mut id) };
@@ -20,6 +21,7 @@ impl Texture {
 }
 
 impl Drop for Texture {
+    #[inline]
     fn drop(&mut self) {
         unsafe { gl::DeleteTextures(1, &self.id) };
     }
@@ -31,6 +33,7 @@ pub struct Textures {
 
 /// Texture objects
 impl Textures {
+    #[inline]
     pub(super) fn new(count: usize) -> Self {
         let mut id = Vec::new();
         unsafe {
@@ -41,14 +44,17 @@ impl Textures {
         }
     }
 
+    #[inline]
     pub fn iter(&self) -> impl Iterator<Item = &Texture> {
         self.textures.iter()
     }
 
+    #[inline]
     pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Texture> {
         self.textures.iter_mut()
     }
 
+    #[inline]
     pub fn count(&self) -> usize {
         self.textures.len()
     }
@@ -58,6 +64,7 @@ impl IntoIterator for Textures {
     type Item = Texture;
     type IntoIter = std::vec::IntoIter<Texture>;
 
+    #[inline]
     fn into_iter(self) -> Self::IntoIter {
         self.textures.into_iter()
     }
@@ -66,12 +73,14 @@ impl IntoIterator for Textures {
 impl Index<usize> for Textures {
     type Output = Texture;
 
+    #[inline]
     fn index(&self, index: usize) -> &Self::Output {
         &self.textures[index]
     }
 }
 
 impl IndexMut<usize> for Textures {
+    #[inline]
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         &mut self.textures[index]
     }
@@ -79,16 +88,19 @@ impl IndexMut<usize> for Textures {
 
 impl Texture {
     /// Warpper of `glBindTexture(...)`
+    #[inline]
     pub fn bind(&self, target: TexTarget) {
         unsafe { gl::BindTexture(target.to_gl_target(), self.id) }
     }
 
     /// Warpper of `glBindTexture(...)`
+    #[inline]
     pub fn unbind(target: TexTarget) {
         unsafe { gl::BindTexture(target.to_gl_target(), 0) }
     }
 
     /// Warpper of `glActiveTexture(...)`
+    #[inline]
     pub fn active(index: u32) {
         unsafe {
             gl::ActiveTexture(gl::TEXTURE0 + index);
@@ -96,6 +108,7 @@ impl Texture {
     }
 
     /// Warpper of `glTextureParameter{i|f|iv|fv}(...)`
+    #[inline]
     pub fn set(&self, param: TexParam) {
         unsafe {
             match param.to_pair() {
@@ -113,6 +126,7 @@ impl Texture {
     }
 
     /// Warpper of `glGenerateTextureMipmap(...)`
+    #[inline]
     pub fn gen_minmap(&self) {
         unsafe {
             gl::GenerateTextureMipmap(self.id);
@@ -120,6 +134,7 @@ impl Texture {
     }
 
     /// Warpper of `glTexImage2D(...)`
+    #[inline]
     pub fn load<T>(
         target: ImageTarget,
         internal_format: InternalFormat,
@@ -153,6 +168,7 @@ impl Texture {
     }
 
     /// Warpper of `glTexImage2D(...)` without error check
+    #[inline]
     pub unsafe fn load_unchecked<T>(
         target: ImageTarget,
         internal_format: InternalFormat,

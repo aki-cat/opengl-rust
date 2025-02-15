@@ -10,6 +10,7 @@ pub struct Buffer {
 }
 
 impl Buffer {
+    #[inline]
     pub(super) fn new() -> Self {
         let mut buffer = 0;
         unsafe {
@@ -20,6 +21,7 @@ impl Buffer {
 }
 
 impl Drop for Buffer {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             gl::DeleteBuffers(1, &self.buffer);
@@ -33,6 +35,7 @@ pub struct Buffers {
 }
 
 impl Buffers {
+    #[inline]
     pub(super) fn new(count: usize) -> Self {
         assert!(count > 0, "The number of buffers must be greater than 0");
         let mut buffers = Vec::with_capacity(count);
@@ -47,11 +50,13 @@ impl Buffers {
     }
 
     /// Return an iterator of the buffers.
+    #[inline]
     pub fn iter(&self) -> impl Iterator<Item = &Buffer> {
         self.buffers.iter()
     }
 
     /// Return an iterator of the buffers.
+    #[inline]
     pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Buffer> {
         self.buffers.iter_mut()
     }
@@ -63,6 +68,7 @@ pub struct IntoIter {
 }
 
 impl IntoIter {
+    #[inline]
     fn new(buffers: Vec<Buffer>) -> Self {
         let buffers = buffers.into_iter().map(|buffer| Some(buffer)).collect();
         Self { buffers, index: 0 }
@@ -72,6 +78,7 @@ impl IntoIter {
 impl Iterator for IntoIter {
     type Item = Buffer;
 
+    #[inline]
     fn next(&mut self) -> Option<Self::Item> {
         let result = self.buffers.get_mut(self.index)?.take();
         self.index += 1;
@@ -83,6 +90,7 @@ impl IntoIterator for Buffers {
     type Item = Buffer;
     type IntoIter = IntoIter;
 
+    #[inline]
     fn into_iter(self) -> Self::IntoIter {
         Self::IntoIter::new(self.buffers)
     }
@@ -91,12 +99,14 @@ impl IntoIterator for Buffers {
 impl Index<usize> for Buffers {
     type Output = Buffer;
 
+    #[inline]
     fn index(&self, index: usize) -> &Self::Output {
         &self.buffers[index]
     }
 }
 
 impl IndexMut<usize> for Buffers {
+    #[inline]
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         &mut self.buffers[index]
     }
@@ -104,6 +114,7 @@ impl IndexMut<usize> for Buffers {
 
 impl Buffer {
     /// Bind this buffer in the current context.
+    #[inline]
     pub fn bind(&self, target: Target) {
         unsafe {
             gl::BindBuffer(target.to_gl_target(), self.buffer);
@@ -111,6 +122,7 @@ impl Buffer {
     }
 
     /// Unbind this buffer in the current context.
+    #[inline]
     pub fn unbind(target: Target) {
         unsafe {
             gl::BindBuffer(target.to_gl_target(), 0);
@@ -118,6 +130,7 @@ impl Buffer {
     }
 
     /// Upload `data` to this buffer.
+    #[inline]
     pub fn data<'a, 'b: 'a, T: Copy>(&'a self, target: Target, data: &'b [T], usage: Usage) {
         unsafe {
             gl::BufferData(
@@ -131,6 +144,7 @@ impl Buffer {
 
     /// Mark the vertex attribute of buffer data.
     #[allow(private_bounds)]
+    #[inline]
     pub unsafe fn mark<T: Copy + GlTypeT>(
         index: usize,
         count: usize,
@@ -156,6 +170,7 @@ impl Buffer {
     /// Mark the vertex attribute of buffer data by `composition`.
     ///
     /// The normalized is false by default.
+    #[inline]
     pub fn gen_mark(composition: &[(GlType, usize)]) {
         let mut current_pos = 0;
         let stride: usize = composition
@@ -179,6 +194,7 @@ impl Buffer {
     }
 
     /// Mark the vertex attribute of buffer data by `composition` with normalized.
+    #[inline]
     pub fn gen_mark_with_normalized(composition: &[(GlType, usize, bool)]) {
         let mut current_pos = 0;
         let stride: usize = composition
@@ -216,6 +232,7 @@ pub enum GlType {
 }
 
 impl GlType {
+    #[inline]
     pub(super) const fn size(self) -> usize {
         match self {
             GlType::u8 => std::mem::size_of::<u8>(),
@@ -229,6 +246,7 @@ impl GlType {
         }
     }
 
+    #[inline]
     pub(super) const fn to_gl_type(self) -> GLuint {
         match self {
             GlType::u8 => gl::UNSIGNED_BYTE,

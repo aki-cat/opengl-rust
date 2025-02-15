@@ -11,6 +11,7 @@ pub struct Shader {
 
 impl Shader {
     /// Create a new shader which type of `ty`.
+    #[inline]
     pub(super) fn new(ty: Type) -> Self {
         let shader = unsafe { gl::CreateShader(ty.to_gl_type()) };
         Self { shader }
@@ -18,6 +19,7 @@ impl Shader {
 }
 
 impl Drop for Shader {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             gl::DeleteShader(self.shader);
@@ -27,6 +29,7 @@ impl Drop for Shader {
 
 impl Shader {
     /// Load source code to this shader.
+    #[inline]
     pub fn source(&self, code: &str) {
         let len = code.len() as i32;
         let code = code.as_ptr() as _;
@@ -39,6 +42,7 @@ impl Shader {
     ///
     /// It will return `Ok(())` if the shader is compiled successfully,
     /// otherwise it will return `Err(String)` which contains the error message.
+    #[inline]
     pub fn compile(&self) -> Result<(), String> {
         unsafe {
             gl::CompileShader(self.shader);
@@ -71,6 +75,7 @@ impl Shader {
     ///
     /// If `self.compile().unwarp()` is never panic,
     /// you can use `unsafe { self.compile_unchecked() }` to improve performance.
+    #[inline]
     pub unsafe fn compile_unchecked(&self) {
         gl::CompileShader(self.shader);
     }

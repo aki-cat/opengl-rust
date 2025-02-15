@@ -10,6 +10,7 @@ pub struct Program {
 }
 
 impl Program {
+    #[inline]
     pub(super) fn new() -> Self {
         let program = unsafe { gl::CreateProgram() };
         Self { program }
@@ -17,6 +18,7 @@ impl Program {
 }
 
 impl Drop for Program {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             gl::DeleteProgram(self.program);
@@ -26,6 +28,7 @@ impl Drop for Program {
 
 impl Program {
     /// Use this shader program in the current context.
+    #[inline]
     pub fn using(&self) {
         unsafe {
             gl::UseProgram(self.program);
@@ -33,6 +36,7 @@ impl Program {
     }
 
     /// Attach a shader to this program.
+    #[inline]
     pub fn attach(&self, shader: &Shader) {
         unsafe {
             gl::AttachShader(self.program, shader.shader);
@@ -43,6 +47,7 @@ impl Program {
     ///
     /// It will return `Ok(())` if the program is linked successfully,
     /// otherwise it will return `Err(String)` which contains the error message.
+    #[inline]
     pub fn link(&self) -> Result<(), String> {
         unsafe {
             gl::LinkProgram(self.program);
@@ -75,6 +80,7 @@ impl Program {
     ///
     /// If `self.link().unwarp()` is never panic,
     /// you can use `unsafe { self.link_unchecked() }` to improve performance.
+    #[inline]
     pub unsafe fn link_unchecked(&self) {
         gl::LinkProgram(self.program);
     }
@@ -82,6 +88,7 @@ impl Program {
 
 use mats::uniform::SetUniform;
 impl Program {
+    #[inline]
     pub fn set_uniform<T: SetUniform>(&self, name: &str, value: &T) -> Result<(), String> {
         let name_ptr = match std::ffi::CString::new(name) {
             Ok(c_str) => c_str,

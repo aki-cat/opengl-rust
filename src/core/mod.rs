@@ -28,6 +28,7 @@ macro_rules! impl_gl_type {
     ($($type:ty => $gl_type:expr);+ $(;)?) => {
         $(
             impl GlTypeT for $type {
+                #[inline]
                 fn to_gl_type() -> gl::types::GLenum {
                     $gl_type
                 }

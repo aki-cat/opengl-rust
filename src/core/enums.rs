@@ -398,6 +398,7 @@ impl TexParam {
         }
     }
 
+    #[inline]
     pub(super) const fn to_pair(&self) -> TexParamPair {
         match self {
             TexParam::DepthStencilMode(depth_mode) => match depth_mode {
@@ -471,6 +472,7 @@ impl TexParam {
 }
 
 impl TexTarget {
+    #[inline]
     pub(super) const fn to_gl_target(&self) -> u32 {
         match self {
             TexTarget::Tex1D => gl::TEXTURE_1D,
@@ -490,6 +492,7 @@ impl TexTarget {
 
 impl MinmapTarget {
     #[allow(dead_code)]
+    #[inline]
     pub(super) const fn to_gl_target(&self) -> u32 {
         match self {
             MinmapTarget::Tex1D => gl::TEXTURE_1D,
@@ -504,6 +507,7 @@ impl MinmapTarget {
 }
 
 impl Target {
+    #[inline]
     pub(super) const fn to_gl_target(self) -> GLuint {
         match self {
             Target::Array => gl::ARRAY_BUFFER,
@@ -525,6 +529,7 @@ impl Target {
 }
 
 impl Usage {
+    #[inline]
     pub(super) const fn to_gl_usage(self) -> GLuint {
         match self {
             Usage::StaticDraw => gl::STATIC_DRAW,
@@ -615,6 +620,7 @@ impl ShaderType {
 }
 
 impl ImageTarget {
+    #[inline]
     pub(super) const fn to_gl_target(self) -> GLuint {
         match self {
             ImageTarget::Texture2d => gl::TEXTURE_2D,
@@ -635,6 +641,7 @@ impl ImageTarget {
 }
 
 impl BaseFormat {
+    #[inline]
     pub(super) const fn to_gl_format(self) -> GLuint {
         match self {
             BaseFormat::Red => gl::RED,
@@ -648,6 +655,7 @@ impl BaseFormat {
 }
 
 impl SizedFormat {
+    #[inline]
     pub(super) const fn to_gl_format(self) -> GLuint {
         match self {
             SizedFormat::R8 => gl::R8,
@@ -716,6 +724,7 @@ impl SizedFormat {
 }
 
 impl CompressedFormat {
+    #[inline]
     pub(super) const fn to_gl_format(self) -> GLuint {
         match self {
             CompressedFormat::RED => gl::COMPRESSED_RED,
@@ -737,6 +746,7 @@ impl CompressedFormat {
 }
 
 impl InternalFormat {
+    #[inline]
     pub(super) const fn to_gl_format(self) -> GLuint {
         match self {
             InternalFormat::Base(base_format) => base_format.to_gl_format(),
@@ -747,6 +757,7 @@ impl InternalFormat {
 }
 
 impl ImageFormat {
+    #[inline]
     pub(super) const fn to_gl_format(self) -> GLuint {
         match self {
             ImageFormat::Red => gl::RED,
@@ -762,6 +773,7 @@ impl ImageFormat {
 }
 
 impl PixelDataType {
+    #[inline]
     pub(super) const fn to_gl_type(self) -> GLuint {
         match self {
             PixelDataType::u8 => gl::UNSIGNED_BYTE,
@@ -789,6 +801,7 @@ impl PixelDataType {
 }
 
 impl CompareFunc {
+    #[inline]
     pub(super) const fn to_gl_func(self) -> GLuint {
         match self {
             CompareFunc::Never => gl::NEVER,
@@ -799,6 +812,125 @@ impl CompareFunc {
             CompareFunc::NotEqual => gl::NOTEQUAL,
             CompareFunc::GreaterEqual => gl::GEQUAL,
             CompareFunc::Always => gl::ALWAYS,
+        }
+    }
+}
+
+pub enum StencilOp {
+    Keep,
+    Zero,
+    Replace,
+    Incr,
+    IncrWrap,
+    Decr,
+    DecrWrap,
+    Invert,
+}
+
+impl StencilOp {
+    #[inline]
+    pub(super) const fn to_gl_op(self) -> GLuint {
+        match self {
+            StencilOp::Keep => gl::KEEP,
+            StencilOp::Zero => gl::ZERO,
+            StencilOp::Replace => gl::REPLACE,
+            StencilOp::Incr => gl::INCR,
+            StencilOp::IncrWrap => gl::INCR_WRAP,
+            StencilOp::Decr => gl::DECR,
+            StencilOp::DecrWrap => gl::DECR_WRAP,
+            StencilOp::Invert => gl::INVERT,
+        }
+    }
+}
+
+pub enum BlendFactor {
+    Zero,
+    One,
+    SrcColor,
+    OneMinusSrcColor,
+    DstColor,
+    OneMinusDstColor,
+    SrcAlpha,
+    OneMinusSrcAlpha,
+    DstAlpha,
+    OneMinusDstAlpha,
+    ConstantColor,
+    OneMinusConstantColor,
+    ConstantAlpha,
+    OneMinusConstantAlpha,
+}
+
+impl BlendFactor {
+    #[inline]
+    pub(super) const fn to_gl_func(self) -> GLuint {
+        match self {
+            BlendFactor::Zero => gl::ZERO,
+            BlendFactor::One => gl::ONE,
+            BlendFactor::SrcColor => gl::SRC_COLOR,
+            BlendFactor::OneMinusSrcColor => gl::ONE_MINUS_SRC_COLOR,
+            BlendFactor::DstColor => gl::DST_COLOR,
+            BlendFactor::OneMinusDstColor => gl::ONE_MINUS_DST_COLOR,
+            BlendFactor::SrcAlpha => gl::SRC_ALPHA,
+            BlendFactor::OneMinusSrcAlpha => gl::ONE_MINUS_SRC_ALPHA,
+            BlendFactor::DstAlpha => gl::DST_ALPHA,
+            BlendFactor::OneMinusDstAlpha => gl::ONE_MINUS_DST_ALPHA,
+            BlendFactor::ConstantColor => gl::CONSTANT_COLOR,
+            BlendFactor::OneMinusConstantColor => gl::ONE_MINUS_CONSTANT_COLOR,
+            BlendFactor::ConstantAlpha => gl::CONSTANT_ALPHA,
+            BlendFactor::OneMinusConstantAlpha => gl::ONE_MINUS_CONSTANT_ALPHA,
+        }
+    }
+}
+
+pub enum BlendEquation {
+    FuncAdd,
+    FuncSubtract,
+    FuncReverseSubtract,
+    Min,
+    Max,
+}
+
+impl BlendEquation {
+    #[inline]
+    pub(super) const fn to_gl_equation(self) -> GLuint {
+        match self {
+            BlendEquation::FuncAdd => gl::FUNC_ADD,
+            BlendEquation::FuncSubtract => gl::FUNC_SUBTRACT,
+            BlendEquation::FuncReverseSubtract => gl::FUNC_REVERSE_SUBTRACT,
+            BlendEquation::Min => gl::MIN,
+            BlendEquation::Max => gl::MAX,
+        }
+    }
+}
+
+pub enum CullFace {
+    Front,
+    Back,
+    FrontAndBack,
+}
+
+impl CullFace {
+    #[inline]
+    pub(super) const fn to_gl_face(self) -> GLuint {
+        match self {
+            CullFace::Front => gl::FRONT,
+            CullFace::Back => gl::BACK,
+            CullFace::FrontAndBack => gl::FRONT_AND_BACK,
+        }
+    }
+}
+
+pub enum FrontFace {
+    Clockwise,
+    CounterClockwise,
+}
+
+impl FrontFace {
+    #[inline]
+    pub(super) const fn to_gl_face(self) -> GLuint {
+        match self {
+            FrontFace::Clockwise => gl::CW,
+            FrontFace::CounterClockwise => gl::CCW,
         }
     }
 }

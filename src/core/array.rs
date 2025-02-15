@@ -8,6 +8,7 @@ pub struct Array {
 }
 
 impl Array {
+    #[inline]
     pub(super) fn new() -> Self {
         let mut array = 0;
         unsafe {
@@ -18,6 +19,7 @@ impl Array {
 }
 
 impl Drop for Array {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             gl::DeleteVertexArrays(1, &self.array);
@@ -31,6 +33,7 @@ pub struct Arrays {
 }
 
 impl Arrays {
+    #[inline]
     pub(super) fn new(count: usize) -> Self {
         let mut arrays = Vec::with_capacity(count);
         unsafe {
@@ -41,16 +44,19 @@ impl Arrays {
     }
 
     /// Return an iterator of the arrays.
+    #[inline]
     pub fn iter(&self) -> impl Iterator<Item = &Array> {
         self.arrays.iter()
     }
 
     /// Return an iterator of the arrays.
+    #[inline]
     pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Array> {
         self.arrays.iter_mut()
     }
 
     /// Return the number of arrays.
+    #[inline]
     pub fn count(&self) -> usize {
         self.arrays.len()
     }
@@ -59,12 +65,14 @@ impl Arrays {
 impl Index<usize> for Arrays {
     type Output = Array;
 
+    #[inline]
     fn index(&self, index: usize) -> &Self::Output {
         &self.arrays[index]
     }
 }
 
 impl IndexMut<usize> for Arrays {
+    #[inline]
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         &mut self.arrays[index]
     }
@@ -76,6 +84,7 @@ pub struct IntoIter {
 }
 
 impl IntoIter {
+    #[inline]
     fn new(arrays: Vec<Array>) -> Self {
         let arrays = arrays.into_iter().map(|array| Some(array)).collect();
         Self { arrays, index: 0 }
@@ -85,6 +94,7 @@ impl IntoIter {
 impl Iterator for IntoIter {
     type Item = Array;
 
+    #[inline]
     fn next(&mut self) -> Option<Self::Item> {
         let result = self.arrays.get_mut(self.index)?.take();
         self.index += 1;
@@ -96,6 +106,7 @@ impl IntoIterator for Arrays {
     type Item = Array;
     type IntoIter = IntoIter;
 
+    #[inline]
     fn into_iter(self) -> Self::IntoIter {
         Self::IntoIter::new(self.arrays)
     }
@@ -103,6 +114,7 @@ impl IntoIterator for Arrays {
 
 impl Array {
     /// Bind this array in the current context.
+    #[inline]
     pub fn bind(&self) {
         unsafe {
             gl::BindVertexArray(self.array);
@@ -110,6 +122,7 @@ impl Array {
     }
 
     /// Unbind this array in the current context.
+    #[inline]
     pub fn unbind() {
         unsafe {
             gl::BindVertexArray(0);
