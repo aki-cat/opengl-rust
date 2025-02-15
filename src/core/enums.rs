@@ -1084,3 +1084,65 @@ impl RenderBufferFormat {
         }
     }
 }
+
+pub enum Attachmect {
+    Color(u32),
+    Depth,
+    Stencil,
+    DepthStencil,
+}
+
+impl Attachmect {
+    #[inline]
+    pub(super) const fn to_gl_attachment(self) -> GLuint {
+        match self {
+            Attachmect::Color(index) => gl::COLOR_ATTACHMENT0 + index,
+            Attachmect::Depth => gl::DEPTH_ATTACHMENT,
+            Attachmect::Stencil => gl::STENCIL_ATTACHMENT,
+            Attachmect::DepthStencil => gl::DEPTH_STENCIL_ATTACHMENT,
+        }
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum GlType {
+    u8,
+    i8,
+    u16,
+    i16,
+    u32,
+    i32,
+    f32,
+    f64,
+}
+
+impl GlType {
+    #[inline]
+    pub(super) const fn size(self) -> usize {
+        match self {
+            GlType::u8 => std::mem::size_of::<u8>(),
+            GlType::i8 => std::mem::size_of::<i8>(),
+            GlType::u16 => std::mem::size_of::<u16>(),
+            GlType::i16 => std::mem::size_of::<i16>(),
+            GlType::u32 => std::mem::size_of::<u32>(),
+            GlType::i32 => std::mem::size_of::<i32>(),
+            GlType::f32 => std::mem::size_of::<f32>(),
+            GlType::f64 => std::mem::size_of::<f64>(),
+        }
+    }
+
+    #[inline]
+    pub(super) const fn to_gl_type(self) -> GLuint {
+        match self {
+            GlType::u8 => gl::UNSIGNED_BYTE,
+            GlType::i8 => gl::BYTE,
+            GlType::u16 => gl::UNSIGNED_SHORT,
+            GlType::i16 => gl::SHORT,
+            GlType::u32 => gl::UNSIGNED_INT,
+            GlType::i32 => gl::INT,
+            GlType::f32 => gl::FLOAT,
+            GlType::f64 => gl::DOUBLE,
+        }
+    }
+}

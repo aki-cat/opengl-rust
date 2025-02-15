@@ -3,7 +3,7 @@ use gl::types::GLuint;
 use super::RenderBufferFormat;
 
 pub struct RenderBuffer {
-    rbo: GLuint,
+    pub(super) rbo: GLuint,
 }
 
 impl RenderBuffer {

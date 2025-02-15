@@ -1,6 +1,6 @@
 use gl::types::GLuint;
 
-use super::FrameBufferTarget;
+use super::{Attachmect, FrameBufferTarget, RenderBuffer};
 
 pub struct FrameBuffer {
     fbo: GLuint,
@@ -101,6 +101,21 @@ impl FrameBuffer {
     pub fn unbind(target: FrameBufferTarget) {
         unsafe {
             gl::BindFramebuffer(target.to_gl_target(), 0);
+        }
+    }
+
+    pub fn attach_render_buffer(
+        target: FrameBufferTarget,
+        attachment: Attachmect,
+        render_buffer: &RenderBuffer,
+    ) {
+        unsafe {
+            gl::FramebufferRenderbuffer(
+                target.to_gl_target(),
+                attachment.to_gl_attachment(),
+                gl::RENDERBUFFER,
+                render_buffer.rbo,
+            );
         }
     }
 }

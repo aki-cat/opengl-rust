@@ -15,7 +15,7 @@ mod shader;
 mod texture;
 
 pub use array::{Array, Arrays};
-pub use buffer::{Buffer, Buffers, GlType};
+pub use buffer::{Buffer, Buffers};
 pub use context::Context;
 pub use enums::*;
 pub use frame_buffer::{FrameBuffer, FrameBuffers};
