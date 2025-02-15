@@ -286,4 +286,15 @@ impl Context {
     ) {
         gl::DrawElements(mode.to_gl_mode(), count as _, ty.to_gl_type(), offset as _);
     }
+
+    /// Wrapper of `glGetError(...)`
+    #[inline]
+    pub fn check() -> Result<(), String> {
+        let err = unsafe { gl::GetError() };
+        if err == gl::NO_ERROR {
+            Ok(())
+        } else {
+            Err(format!("Error code: {}", err))
+        }
+    }
 }
