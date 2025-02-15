@@ -62,7 +62,7 @@ pub fn load_texture(context: &opengl::Context) -> Texture {
     let data = img.into_raw();
 
     Texture::load(
-        ImageTarget::Texture2d,
+        ImageTarget::Tex2d,
         InternalFormat::Base(BaseFormat::RGBA),
         size,
         ImageFormat::RGBA,

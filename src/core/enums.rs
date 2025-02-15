@@ -220,19 +220,19 @@ pub enum MinmapTarget {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum ImageTarget {
-    Texture2d,
-    ProxyTexture2d,
-    Texture1dArray,
-    ProxyTexture1dArray,
-    TextureRectangle,
-    ProxyTextureRectangle,
-    TextureCubeMapPositiveX,
-    TextureCubeMapNegativeX,
-    TextureCubeMapPositiveY,
-    TextureCubeMapNegativeY,
-    TextureCubeMapPositiveZ,
-    TextureCubeMapNegativeZ,
-    ProxyTextureCubeMap,
+    Tex2d,
+    ProxyTex2d,
+    Tex1dArray,
+    ProxyTex1dArray,
+    TexRectangle,
+    ProxyTexRectangle,
+    TexCubeMapPositiveX,
+    TexCubeMapNegativeX,
+    TexCubeMapPositiveY,
+    TexCubeMapNegativeY,
+    TexCubeMapPositiveZ,
+    TexCubeMapNegativeZ,
+    ProxyTexCubeMap,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -623,19 +623,19 @@ impl ImageTarget {
     #[inline]
     pub(super) const fn to_gl_target(self) -> GLuint {
         match self {
-            ImageTarget::Texture2d => gl::TEXTURE_2D,
-            ImageTarget::ProxyTexture2d => gl::PROXY_TEXTURE_2D,
-            ImageTarget::Texture1dArray => gl::TEXTURE_1D_ARRAY,
-            ImageTarget::ProxyTexture1dArray => gl::PROXY_TEXTURE_1D_ARRAY,
-            ImageTarget::TextureRectangle => gl::TEXTURE_RECTANGLE,
-            ImageTarget::ProxyTextureRectangle => gl::PROXY_TEXTURE_RECTANGLE,
-            ImageTarget::TextureCubeMapPositiveX => gl::TEXTURE_CUBE_MAP_POSITIVE_X,
-            ImageTarget::TextureCubeMapNegativeX => gl::TEXTURE_CUBE_MAP_NEGATIVE_X,
-            ImageTarget::TextureCubeMapPositiveY => gl::TEXTURE_CUBE_MAP_POSITIVE_Y,
-            ImageTarget::TextureCubeMapNegativeY => gl::TEXTURE_CUBE_MAP_NEGATIVE_Y,
-            ImageTarget::TextureCubeMapPositiveZ => gl::TEXTURE_CUBE_MAP_POSITIVE_Z,
-            ImageTarget::TextureCubeMapNegativeZ => gl::TEXTURE_CUBE_MAP_NEGATIVE_Z,
-            ImageTarget::ProxyTextureCubeMap => gl::PROXY_TEXTURE_CUBE_MAP,
+            ImageTarget::Tex2d => gl::TEXTURE_2D,
+            ImageTarget::ProxyTex2d => gl::PROXY_TEXTURE_2D,
+            ImageTarget::Tex1dArray => gl::TEXTURE_1D_ARRAY,
+            ImageTarget::ProxyTex1dArray => gl::PROXY_TEXTURE_1D_ARRAY,
+            ImageTarget::TexRectangle => gl::TEXTURE_RECTANGLE,
+            ImageTarget::ProxyTexRectangle => gl::PROXY_TEXTURE_RECTANGLE,
+            ImageTarget::TexCubeMapPositiveX => gl::TEXTURE_CUBE_MAP_POSITIVE_X,
+            ImageTarget::TexCubeMapNegativeX => gl::TEXTURE_CUBE_MAP_NEGATIVE_X,
+            ImageTarget::TexCubeMapPositiveY => gl::TEXTURE_CUBE_MAP_POSITIVE_Y,
+            ImageTarget::TexCubeMapNegativeY => gl::TEXTURE_CUBE_MAP_NEGATIVE_Y,
+            ImageTarget::TexCubeMapPositiveZ => gl::TEXTURE_CUBE_MAP_POSITIVE_Z,
+            ImageTarget::TexCubeMapNegativeZ => gl::TEXTURE_CUBE_MAP_NEGATIVE_Z,
+            ImageTarget::ProxyTexCubeMap => gl::PROXY_TEXTURE_CUBE_MAP,
         }
     }
 }
@@ -954,6 +954,53 @@ impl FrameBufferTarget {
             FrameBufferTarget::Read => gl::READ_FRAMEBUFFER,
             FrameBufferTarget::Draw => gl::DRAW_FRAMEBUFFER,
             FrameBufferTarget::ReadDraw => gl::READ_FRAMEBUFFER,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum FrameBufferAttachment {
+    Color,
+    Depth,
+    Stencil,
+    DepthStencil,
+}
+
+impl FrameBufferAttachment {
+    #[inline]
+    pub(super) const fn to_gl_attachment(self) -> GLuint {
+        match self {
+            FrameBufferAttachment::Color => gl::COLOR_ATTACHMENT0,
+            FrameBufferAttachment::Depth => gl::DEPTH_ATTACHMENT,
+            FrameBufferAttachment::Stencil => gl::STENCIL_ATTACHMENT,
+            FrameBufferAttachment::DepthStencil => gl::DEPTH_STENCIL_ATTACHMENT,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum TextureTarget {
+    Tex2d,
+    Tex2dMultisample,
+    TexCubeMapPositiveX,
+    TexCubeMapNegativeX,
+    TexCubeMapPositiveY,
+    TexCubeMapNegativeY,
+    TexCubeMapPositiveZ,
+    TexCubeMapNegativeZ,
+}
+
+impl TextureTarget {
+    pub(super) const fn to_gl_enum(self) -> GLuint {
+        match self {
+            TextureTarget::Tex2d => gl::TEXTURE_2D,
+            TextureTarget::Tex2dMultisample => gl::TEXTURE_2D_MULTISAMPLE,
+            TextureTarget::TexCubeMapPositiveX => gl::TEXTURE_CUBE_MAP_POSITIVE_X,
+            TextureTarget::TexCubeMapNegativeX => gl::TEXTURE_CUBE_MAP_NEGATIVE_X,
+            TextureTarget::TexCubeMapPositiveY => gl::TEXTURE_CUBE_MAP_POSITIVE_Y,
+            TextureTarget::TexCubeMapNegativeY => gl::TEXTURE_CUBE_MAP_NEGATIVE_Y,
+            TextureTarget::TexCubeMapPositiveZ => gl::TEXTURE_CUBE_MAP_POSITIVE_Z,
+            TextureTarget::TexCubeMapNegativeZ => gl::TEXTURE_CUBE_MAP_NEGATIVE_Z,
         }
     }
 }

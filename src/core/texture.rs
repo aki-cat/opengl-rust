@@ -3,7 +3,8 @@ use std::ops::{Index, IndexMut};
 use gl::types::GLuint;
 
 use super::{
-    ImageFormat, ImageTarget, InternalFormat, PixelDataType, TexParam, TexParamPair, TexTarget,
+    FrameBufferAttachment, FrameBufferTarget, ImageFormat, ImageTarget, InternalFormat,
+    PixelDataType, TexParam, TexParamPair, TexTarget, TextureTarget,
 };
 
 /// Texture object
@@ -188,5 +189,24 @@ impl Texture {
             type_.to_gl_type(),
             data.as_ptr() as _,
         );
+    }
+
+    /// Warpper of `glFramebufferTexture2D(...)`
+    #[inline]
+    pub fn attach(
+        &self,
+        target: FrameBufferTarget,
+        attach: FrameBufferAttachment,
+        tex_target: TextureTarget,
+    ) {
+        unsafe {
+            gl::FramebufferTexture2D(
+                target.to_gl_target(),
+                attach.to_gl_attachment(),
+                tex_target.to_gl_enum(),
+                self.id,
+                0,
+            );
+        }
     }
 }
