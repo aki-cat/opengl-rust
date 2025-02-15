@@ -129,19 +129,6 @@ impl Buffer {
         }
     }
 
-    /// Upload `data` to this buffer.
-    #[inline]
-    pub fn data<'a, 'b: 'a, T: Copy>(&'a self, target: Target, data: &'b [T], usage: Usage) {
-        unsafe {
-            gl::BufferData(
-                target.to_gl_target(),
-                (data.len() * size_of::<T>()) as _,
-                data.as_ptr() as *const _,
-                usage.to_gl_usage(),
-            );
-        }
-    }
-
     /// Mark the vertex attribute of buffer data.
     #[allow(private_bounds)]
     #[inline]
@@ -214,6 +201,30 @@ impl Buffer {
                 gl::EnableVertexAttribArray(index as _);
             }
             current_pos += ty.size() * count;
+        }
+    }
+
+    /// Upload `data` to this buffer.
+    #[inline]
+    pub fn data<'a, 'b: 'a, T: Copy>(&'a self, data: &'b [T], usage: Usage) {
+        unsafe {
+            gl::NamedBufferData(
+                self.buffer,
+                (data.len() * size_of::<T>()) as _,
+                data.as_ptr() as _,
+                usage.to_gl_usage(),
+            );
+        }
+    }
+
+    pub unsafe fn sub_data<'a, 'b: 'a, T: Copy>(&'a self, offset: usize, data: &'b [T]) {
+        unsafe {
+            gl::NamedBufferSubData(
+                self.buffer,
+                offset as _,
+                (data.len() * size_of::<T>()) as _,
+                data.as_ptr() as _,
+            );
         }
     }
 }
