@@ -217,6 +217,8 @@ impl Buffer {
         }
     }
 
+    /// Upload `data` to a part of this buffer.
+    #[inline]
     pub unsafe fn sub_data<'a, 'b: 'a, T: Copy>(&'a self, offset: usize, data: &'b [T]) {
         unsafe {
             gl::NamedBufferSubData(
