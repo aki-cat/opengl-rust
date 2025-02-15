@@ -991,6 +991,7 @@ pub enum TextureTarget {
 }
 
 impl TextureTarget {
+    #[inline]
     pub(super) const fn to_gl_enum(self) -> GLuint {
         match self {
             TextureTarget::Tex2d => gl::TEXTURE_2D,
@@ -1045,6 +1046,7 @@ pub enum RenderBufferFormat {
 }
 
 impl RenderBufferFormat {
+    #[inline]
     pub(super) const fn to_gl_format(self) -> GLuint {
         match self {
             RenderBufferFormat::R8 => gl::R8,
@@ -1143,6 +1145,35 @@ impl GlType {
             GlType::i32 => gl::INT,
             GlType::f32 => gl::FLOAT,
             GlType::f64 => gl::DOUBLE,
+        }
+    }
+}
+
+pub struct TexCubeMap {
+    index: u8,
+}
+
+impl TexCubeMap {
+    #[inline]
+    pub fn new() -> Self {
+        Self { index: 0 }
+    }
+}
+
+impl Iterator for TexCubeMap {
+    type Item = ImageTarget;
+
+    #[inline]
+    fn next(&mut self) -> Option<Self::Item> {
+        self.index += 1;
+        match self.index {
+            1 => Some(ImageTarget::TexCubeMapPositiveX),
+            2 => Some(ImageTarget::TexCubeMapNegativeX),
+            3 => Some(ImageTarget::TexCubeMapPositiveY),
+            4 => Some(ImageTarget::TexCubeMapNegativeY),
+            5 => Some(ImageTarget::TexCubeMapPositiveZ),
+            6 => Some(ImageTarget::TexCubeMapNegativeZ),
+            _ => return None,
         }
     }
 }
