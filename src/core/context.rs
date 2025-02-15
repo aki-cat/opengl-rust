@@ -101,6 +101,16 @@ impl Context {
         Textures::new(count)
     }
 
+    /// Create a new frame buffer object.
+    pub fn new_frame_buffer(&self) -> super::FrameBuffer {
+        super::FrameBuffer::new()
+    }
+
+    /// Create multiple new frame buffer objects.
+    pub fn new_frame_buffers(&self, count: usize) -> super::FrameBuffers {
+        super::FrameBuffers::new(count)
+    }
+
     /// Wrapper of `glViewport(...)`.
     #[inline]
     pub fn view_port(&self, x: i32, y: i32, width: i32, height: i32) {

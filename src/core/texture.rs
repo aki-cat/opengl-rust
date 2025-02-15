@@ -35,7 +35,7 @@ pub struct Textures {
 impl Textures {
     #[inline]
     pub(super) fn new(count: usize) -> Self {
-        let mut id = Vec::new();
+        let mut id = Vec::with_capacity(count);
         unsafe {
             gl::GenTextures(count as _, id.as_mut_ptr());
         }

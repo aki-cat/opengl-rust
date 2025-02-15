@@ -816,6 +816,7 @@ impl CompareFunc {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum StencilOp {
     Keep,
     Zero,
@@ -843,6 +844,7 @@ impl StencilOp {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum BlendFactor {
     Zero,
     One,
@@ -882,6 +884,7 @@ impl BlendFactor {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum BlendEquation {
     FuncAdd,
     FuncSubtract,
@@ -903,6 +906,7 @@ impl BlendEquation {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum CullFace {
     Front,
     Back,
@@ -920,6 +924,7 @@ impl CullFace {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum FrontFace {
     Clockwise,
     CounterClockwise,
@@ -931,6 +936,24 @@ impl FrontFace {
         match self {
             FrontFace::Clockwise => gl::CW,
             FrontFace::CounterClockwise => gl::CCW,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum FrameBufferTarget {
+    Read,
+    Draw,
+    ReadDraw,
+}
+
+impl FrameBufferTarget {
+    #[inline]
+    pub(super) const fn to_gl_target(self) -> GLuint {
+        match self {
+            FrameBufferTarget::Read => gl::READ_FRAMEBUFFER,
+            FrameBufferTarget::Draw => gl::DRAW_FRAMEBUFFER,
+            FrameBufferTarget::ReadDraw => gl::READ_FRAMEBUFFER,
         }
     }
 }
