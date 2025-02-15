@@ -1,5 +1,7 @@
 use gl::types::GLuint;
 
+use super::RenderBufferFormat;
+
 pub struct RenderBuffer {
     rbo: GLuint,
 }
@@ -99,6 +101,18 @@ impl RenderBuffer {
     pub fn unbind() {
         unsafe {
             gl::BindRenderbuffer(gl::RENDERBUFFER, 0);
+        }
+    }
+
+    #[inline]
+    pub fn storage(format: RenderBufferFormat, (width, height): (u32, u32)) {
+        unsafe {
+            gl::RenderbufferStorage(
+                gl::RENDERBUFFER,
+                format.to_gl_format(),
+                width as _,
+                height as _,
+            );
         }
     }
 }

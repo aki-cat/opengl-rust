@@ -111,6 +111,16 @@ impl Context {
         super::FrameBuffers::new(count)
     }
 
+    /// Create a new render buffer object.
+    pub fn new_render_buffer(&self) -> super::RenderBuffer {
+        super::RenderBuffer::new()
+    }
+
+    /// Create multiple new render buffer objects.
+    pub fn new_render_buffers(&self, count: usize) -> super::RenderBuffers {
+        super::RenderBuffers::new(count)
+    }
+
     /// Wrapper of `glViewport(...)`.
     #[inline]
     pub fn view_port(&self, x: i32, y: i32, width: i32, height: i32) {

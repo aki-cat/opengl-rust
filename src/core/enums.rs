@@ -1004,3 +1004,83 @@ impl TextureTarget {
         }
     }
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[allow(non_camel_case_types)]
+pub enum RenderBufferFormat {
+    R8,
+    R8UI,
+    R8I,
+    R16UI,
+    R16I,
+    R32UI,
+    R32I,
+    RG8,
+    RG8UI,
+    RG8I,
+    RG16UI,
+    RG16I,
+    RG32UI,
+    RG32I,
+    RGB8,
+    RGB565,
+    RGBA8,
+    SRGB8_ALPHA8,
+    RGB5_A1,
+    RGBA4,
+    RGB10_A2,
+    RGBA8UI,
+    RGBA8I,
+    RGB10_A2UI,
+    RGBA16UI,
+    RGBA16I,
+    RGBA32I,
+    RGBA32UI,
+    DEPTH_COMPONENT16,
+    DEPTH_COMPONENT24,
+    DEPTH_COMPONENT32F,
+    DEPTH24_STENCIL8,
+    DEPTH32F_STENCIL8,
+    STENCIL_INDEX,
+}
+
+impl RenderBufferFormat {
+    pub(super) const fn to_gl_format(self) -> GLuint {
+        match self {
+            RenderBufferFormat::R8 => gl::R8,
+            RenderBufferFormat::R8UI => gl::R8UI,
+            RenderBufferFormat::R8I => gl::R8I,
+            RenderBufferFormat::R16UI => gl::R16UI,
+            RenderBufferFormat::R16I => gl::R16I,
+            RenderBufferFormat::R32UI => gl::R32UI,
+            RenderBufferFormat::R32I => gl::R32I,
+            RenderBufferFormat::RG8 => gl::RG8,
+            RenderBufferFormat::RG8UI => gl::RG8UI,
+            RenderBufferFormat::RG8I => gl::RG8I,
+            RenderBufferFormat::RG16UI => gl::RG16UI,
+            RenderBufferFormat::RG16I => gl::RG16I,
+            RenderBufferFormat::RG32UI => gl::RG32UI,
+            RenderBufferFormat::RG32I => gl::RG32I,
+            RenderBufferFormat::RGB8 => gl::RGB8,
+            RenderBufferFormat::RGB565 => gl::RGB565,
+            RenderBufferFormat::RGBA8 => gl::RGBA8,
+            RenderBufferFormat::SRGB8_ALPHA8 => gl::SRGB8_ALPHA8,
+            RenderBufferFormat::RGB5_A1 => gl::RGB5_A1,
+            RenderBufferFormat::RGBA4 => gl::RGBA4,
+            RenderBufferFormat::RGB10_A2 => gl::RGB10_A2,
+            RenderBufferFormat::RGBA8UI => gl::RGBA8UI,
+            RenderBufferFormat::RGBA8I => gl::RGBA8I,
+            RenderBufferFormat::RGB10_A2UI => gl::RGB10_A2UI,
+            RenderBufferFormat::RGBA16UI => gl::RGBA16UI,
+            RenderBufferFormat::RGBA16I => gl::RGBA16I,
+            RenderBufferFormat::RGBA32I => gl::RGBA32I,
+            RenderBufferFormat::RGBA32UI => gl::RGBA32UI,
+            RenderBufferFormat::DEPTH_COMPONENT16 => gl::DEPTH_COMPONENT16,
+            RenderBufferFormat::DEPTH_COMPONENT24 => gl::DEPTH_COMPONENT24,
+            RenderBufferFormat::DEPTH_COMPONENT32F => gl::DEPTH_COMPONENT32F,
+            RenderBufferFormat::DEPTH24_STENCIL8 => gl::DEPTH24_STENCIL8,
+            RenderBufferFormat::DEPTH32F_STENCIL8 => gl::DEPTH32F_STENCIL8,
+            RenderBufferFormat::STENCIL_INDEX => gl::STENCIL_INDEX,
+        }
+    }
+}
