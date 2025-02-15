@@ -1,6 +1,6 @@
-use std::{process, sync::mpsc::channel, thread};
 use glfw::{fail_on_errors, Context, WindowHint};
 use opengl::*;
+use std::{process, sync::mpsc::channel, thread};
 
 const IMAGE: [f32; 20] = [
     0.50, 0.50, 0.0, /* Pos|Color */ 1.0, 0.0, // 0
@@ -32,17 +32,13 @@ pub fn load_buffer(context: &opengl::Context) -> Vertex {
 
     vertex.new_buffer(|vbo| {
         vbo.bind(Target::Array);
-        vbo.data(Target::Array, &IMAGE, Usage::StaticDraw);
+        vbo.data(&IMAGE, Usage::StaticDraw);
         Buffer::gen_mark(&[(GlType::f32, 3), (GlType::f32, 2)]);
     });
 
     vertex.new_buffer(|ebo| {
         ebo.bind(Target::ElementArray);
-        ebo.data(
-            Target::ElementArray,
-            &INDEICE,
-            Usage::StaticDraw,
-        );
+        ebo.data(&INDEICE, Usage::StaticDraw);
     });
 
     vertex
@@ -138,7 +134,6 @@ fn main() {
     tx2.send(window).unwrap();
 
     let handle = thread::spawn(move || {
-
         while !handle.is_finished() {
             for (_, event) in glfw::flush_messages(&events) {
                 let _ = event;

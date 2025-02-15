@@ -1,6 +1,6 @@
-use std::{process, thread};
 use glfw::{fail_on_errors, Context, WindowHint};
 use opengl::*;
+use std::{process, thread};
 
 const TRIANGLE: [f32; 18] = [
     0.00, 0.50, 0.0, /* Pos|Color */ 1.0, 0.0, 0.0, // 0
@@ -28,7 +28,7 @@ pub fn load_triangle_buffer(context: &opengl::Context) -> Vertex {
     let mut vertex = Vertex::new(context);
     vertex.new_buffer(|vbo| {
         vbo.bind(Target::Array);
-        vbo.data(Target::Array, &TRIANGLE, Usage::StaticDraw);
+        vbo.data(&TRIANGLE, Usage::StaticDraw);
 
         Buffer::gen_mark(&[(GlType::f32, 3); 2]);
     });
@@ -49,14 +49,14 @@ pub fn load_square_buffer(context: &opengl::Context) -> Vertex {
     let mut vertex = Vertex::new(context);
     vertex.new_buffer(|vbo| {
         vbo.bind(Target::Array);
-        vbo.data(Target::Array, &SQUARE, Usage::StaticDraw);
+        vbo.data(&SQUARE, Usage::StaticDraw);
 
         Buffer::gen_mark(&[(GlType::f32, 3); 2]);
     });
 
     vertex.new_buffer(|ebo| {
         ebo.bind(Target::ElementArray);
-        ebo.data(Target::ElementArray, &SQUARE_INDICES, Usage::StaticDraw);
+        ebo.data(&SQUARE_INDICES, Usage::StaticDraw);
     });
 
     vertex
