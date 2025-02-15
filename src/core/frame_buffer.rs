@@ -1,6 +1,6 @@
 use gl::types::GLuint;
 
-use super::{Attachmect, FrameBufferTarget, RenderBuffer};
+use super::{Attachmect, Filter, FrameBufferTarget, RenderBuffer};
 
 pub struct FrameBuffer {
     fbo: GLuint,
@@ -132,6 +132,56 @@ impl FrameBuffer {
             Ok(())
         } else {
             Err(format!("Not complete, error code: {}", err))
+        }
+    }
+
+    /// Wrapper of `glBlitNamedFramebuffer(...)`
+    pub fn blit_from(
+        &self,
+        frame_buffer: &FrameBuffer,
+        ((src_x0, src_y0), (src_x1, src_y1)): ((u32, u32), (u32, u32)),
+        ((dst_x0, dst_y0), (dst_x1, dst_y1)): ((u32, u32), (u32, u32)),
+        mask: u32,
+        filter: Filter,
+    ) {
+        unsafe {
+            gl::BlitNamedFramebuffer(
+                frame_buffer.fbo,
+                self.fbo,
+                src_x0 as _,
+                src_y0 as _,
+                src_x1 as _,
+                src_y1 as _,
+                dst_x0 as _,
+                dst_y0 as _,
+                dst_x1 as _,
+                dst_y1 as _,
+                mask,
+                filter.to_gl_filter(),
+            );
+        }
+    }
+
+    /// Wrapper of `glBlitFramebuffer(...)`
+    pub fn blit(
+        ((src_x0, src_y0), (src_x1, src_y1)): ((u32, u32), (u32, u32)),
+        ((dst_x0, dst_y0), (dst_x1, dst_y1)): ((u32, u32), (u32, u32)),
+        mask: u32,
+        filter: Filter,
+    ) {
+        unsafe {
+            gl::BlitFramebuffer(
+                src_x0 as _,
+                src_y0 as _,
+                src_x1 as _,
+                src_y1 as _,
+                dst_x0 as _,
+                dst_y0 as _,
+                dst_x1 as _,
+                dst_y1 as _,
+                mask,
+                filter.to_gl_filter(),
+            );
         }
     }
 }

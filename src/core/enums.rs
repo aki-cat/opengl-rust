@@ -1,5 +1,3 @@
-use gl::types::GLuint;
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Mode {
     Points,
@@ -508,7 +506,7 @@ impl MinmapTarget {
 
 impl Target {
     #[inline]
-    pub(super) const fn to_gl_target(self) -> GLuint {
+    pub(super) const fn to_gl_target(self) -> GLenum {
         match self {
             Target::Array => gl::ARRAY_BUFFER,
             Target::AtomicCounter => gl::ATOMIC_COUNTER_BUFFER,
@@ -530,7 +528,7 @@ impl Target {
 
 impl Usage {
     #[inline]
-    pub(super) const fn to_gl_usage(self) -> GLuint {
+    pub(super) const fn to_gl_usage(self) -> GLenum {
         match self {
             Usage::StaticDraw => gl::STATIC_DRAW,
             Usage::StaticRead => gl::STATIC_READ,
@@ -607,7 +605,7 @@ impl Cap {
 }
 
 impl ShaderType {
-    pub(crate) const fn to_gl_type(self) -> GLuint {
+    pub(crate) const fn to_gl_type(self) -> GLenum {
         match self {
             ShaderType::Vertex => gl::VERTEX_SHADER,
             ShaderType::Fragmet => gl::FRAGMENT_SHADER,
@@ -621,7 +619,7 @@ impl ShaderType {
 
 impl ImageTarget {
     #[inline]
-    pub(super) const fn to_gl_target(self) -> GLuint {
+    pub(super) const fn to_gl_target(self) -> GLenum {
         match self {
             ImageTarget::Tex2d => gl::TEXTURE_2D,
             ImageTarget::ProxyTex2d => gl::PROXY_TEXTURE_2D,
@@ -642,7 +640,7 @@ impl ImageTarget {
 
 impl BaseFormat {
     #[inline]
-    pub(super) const fn to_gl_format(self) -> GLuint {
+    pub(super) const fn to_gl_format(self) -> GLenum {
         match self {
             BaseFormat::Red => gl::RED,
             BaseFormat::RG => gl::RG,
@@ -656,7 +654,7 @@ impl BaseFormat {
 
 impl SizedFormat {
     #[inline]
-    pub(super) const fn to_gl_format(self) -> GLuint {
+    pub(super) const fn to_gl_format(self) -> GLenum {
         match self {
             SizedFormat::R8 => gl::R8,
             SizedFormat::R8_SNORM => gl::R8_SNORM,
@@ -725,7 +723,7 @@ impl SizedFormat {
 
 impl CompressedFormat {
     #[inline]
-    pub(super) const fn to_gl_format(self) -> GLuint {
+    pub(super) const fn to_gl_format(self) -> GLenum {
         match self {
             CompressedFormat::RED => gl::COMPRESSED_RED,
             CompressedFormat::RG => gl::COMPRESSED_RG,
@@ -747,7 +745,7 @@ impl CompressedFormat {
 
 impl InternalFormat {
     #[inline]
-    pub(super) const fn to_gl_format(self) -> GLuint {
+    pub(super) const fn to_gl_format(self) -> GLenum {
         match self {
             InternalFormat::Base(base_format) => base_format.to_gl_format(),
             InternalFormat::Sized(sized_format) => sized_format.to_gl_format(),
@@ -758,7 +756,7 @@ impl InternalFormat {
 
 impl ImageFormat {
     #[inline]
-    pub(super) const fn to_gl_format(self) -> GLuint {
+    pub(super) const fn to_gl_format(self) -> GLenum {
         match self {
             ImageFormat::Red => gl::RED,
             ImageFormat::RG => gl::RG,
@@ -774,7 +772,7 @@ impl ImageFormat {
 
 impl PixelDataType {
     #[inline]
-    pub(super) const fn to_gl_type(self) -> GLuint {
+    pub(super) const fn to_gl_type(self) -> GLenum {
         match self {
             PixelDataType::u8 => gl::UNSIGNED_BYTE,
             PixelDataType::i8 => gl::BYTE,
@@ -802,7 +800,7 @@ impl PixelDataType {
 
 impl CompareFunc {
     #[inline]
-    pub(super) const fn to_gl_func(self) -> GLuint {
+    pub(super) const fn to_gl_func(self) -> GLenum {
         match self {
             CompareFunc::Never => gl::NEVER,
             CompareFunc::Less => gl::LESS,
@@ -830,7 +828,7 @@ pub enum StencilOp {
 
 impl StencilOp {
     #[inline]
-    pub(super) const fn to_gl_op(self) -> GLuint {
+    pub(super) const fn to_gl_op(self) -> GLenum {
         match self {
             StencilOp::Keep => gl::KEEP,
             StencilOp::Zero => gl::ZERO,
@@ -864,7 +862,7 @@ pub enum BlendFactor {
 
 impl BlendFactor {
     #[inline]
-    pub(super) const fn to_gl_func(self) -> GLuint {
+    pub(super) const fn to_gl_func(self) -> GLenum {
         match self {
             BlendFactor::Zero => gl::ZERO,
             BlendFactor::One => gl::ONE,
@@ -895,7 +893,7 @@ pub enum BlendEquation {
 
 impl BlendEquation {
     #[inline]
-    pub(super) const fn to_gl_equation(self) -> GLuint {
+    pub(super) const fn to_gl_equation(self) -> GLenum {
         match self {
             BlendEquation::FuncAdd => gl::FUNC_ADD,
             BlendEquation::FuncSubtract => gl::FUNC_SUBTRACT,
@@ -915,7 +913,7 @@ pub enum CullFace {
 
 impl CullFace {
     #[inline]
-    pub(super) const fn to_gl_face(self) -> GLuint {
+    pub(super) const fn to_gl_face(self) -> GLenum {
         match self {
             CullFace::Front => gl::FRONT,
             CullFace::Back => gl::BACK,
@@ -932,7 +930,7 @@ pub enum FrontFace {
 
 impl FrontFace {
     #[inline]
-    pub(super) const fn to_gl_face(self) -> GLuint {
+    pub(super) const fn to_gl_face(self) -> GLenum {
         match self {
             FrontFace::Clockwise => gl::CW,
             FrontFace::CounterClockwise => gl::CCW,
@@ -949,7 +947,7 @@ pub enum FrameBufferTarget {
 
 impl FrameBufferTarget {
     #[inline]
-    pub(super) const fn to_gl_target(self) -> GLuint {
+    pub(super) const fn to_gl_target(self) -> GLenum {
         match self {
             FrameBufferTarget::Read => gl::READ_FRAMEBUFFER,
             FrameBufferTarget::Draw => gl::DRAW_FRAMEBUFFER,
@@ -968,7 +966,7 @@ pub enum FrameBufferAttachment {
 
 impl FrameBufferAttachment {
     #[inline]
-    pub(super) const fn to_gl_attachment(self) -> GLuint {
+    pub(super) const fn to_gl_attachment(self) -> GLenum {
         match self {
             FrameBufferAttachment::Color => gl::COLOR_ATTACHMENT0,
             FrameBufferAttachment::Depth => gl::DEPTH_ATTACHMENT,
@@ -992,7 +990,7 @@ pub enum TextureTarget {
 
 impl TextureTarget {
     #[inline]
-    pub(super) const fn to_gl_enum(self) -> GLuint {
+    pub(super) const fn to_gl_enum(self) -> GLenum {
         match self {
             TextureTarget::Tex2d => gl::TEXTURE_2D,
             TextureTarget::Tex2dMultisample => gl::TEXTURE_2D_MULTISAMPLE,
@@ -1047,7 +1045,7 @@ pub enum RenderBufferFormat {
 
 impl RenderBufferFormat {
     #[inline]
-    pub(super) const fn to_gl_format(self) -> GLuint {
+    pub(super) const fn to_gl_format(self) -> GLenum {
         match self {
             RenderBufferFormat::R8 => gl::R8,
             RenderBufferFormat::R8UI => gl::R8UI,
@@ -1096,7 +1094,7 @@ pub enum Attachmect {
 
 impl Attachmect {
     #[inline]
-    pub(super) const fn to_gl_attachment(self) -> GLuint {
+    pub(super) const fn to_gl_attachment(self) -> GLenum {
         match self {
             Attachmect::Color(index) => gl::COLOR_ATTACHMENT0 + index,
             Attachmect::Depth => gl::DEPTH_ATTACHMENT,
@@ -1135,7 +1133,7 @@ impl GlType {
     }
 
     #[inline]
-    pub(super) const fn to_gl_type(self) -> GLuint {
+    pub(super) const fn to_gl_type(self) -> GLenum {
         match self {
             GlType::u8 => gl::UNSIGNED_BYTE,
             GlType::i8 => gl::BYTE,
@@ -1174,6 +1172,20 @@ impl Iterator for TexCubeMap {
             5 => Some(ImageTarget::TexCubeMapPositiveZ),
             6 => Some(ImageTarget::TexCubeMapNegativeZ),
             _ => return None,
+        }
+    }
+}
+
+pub enum Filter {
+    Nearest,
+    Linear,
+}
+
+impl Filter {
+    pub(super) const fn to_gl_filter(self) -> GLenum {
+        match self {
+            Filter::Nearest => gl::NEAREST,
+            Filter::Linear => gl::LINEAR,
         }
     }
 }
