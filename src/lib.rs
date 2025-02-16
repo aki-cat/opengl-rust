@@ -6,4 +6,4 @@ pub use ext::*;
 
 pub const OPENGL_VERSION: (u32, u32) = (4, 5);
 
-pub use mats::*;
+pub extern crate mats;
