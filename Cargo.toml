@@ -2,6 +2,9 @@
 name = "opengl"
 version = "0.1.0"
 edition = "2021"
+description = "OpenGL for Rust"
+repository = "https://github.com/Anglebase/opengl.git"
+license = "MIT"
 
 [dependencies]
 gl = "0.14.0"
