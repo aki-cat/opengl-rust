@@ -33,12 +33,12 @@ const INDEICE: [u32; 36] = [
 
 fn load_buffer(context: &opengl::Context) -> Vertex {
     let mut vertex = Vertex::new(context);
-    vertex.new_buffer(|vbo| {
+    vertex.new_buffer(&context, |vbo| {
         vbo.bind(Target::Array);
         vbo.data(&VERTEX, Usage::StaticDraw);
         Buffer::gen_mark(&[(GlType::f32, 3); 2]);
     });
-    vertex.new_buffer(|ebo| {
+    vertex.new_buffer(&context, |ebo| {
         ebo.bind(Target::ElementArray);
         ebo.data(&INDEICE, Usage::StaticDraw);
     });

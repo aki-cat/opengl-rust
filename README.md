@@ -34,7 +34,7 @@ pub fn load_triangle_shader(context: &opengl::Context, v_code: &str, f_code: &st
 
 pub fn load_triangle_buffer(context: &opengl::Context) -> Vertex {
     let mut vertex = Vertex::new(context);
-    vertex.new_buffer(|vbo| {
+    vertex.new_buffer(&context, |vbo| {
         vbo.bind(Target::Array);
         vbo.data(&TRIANGLE, Usage::StaticDraw);
 
@@ -55,14 +55,14 @@ const SQUARE_INDICES: [u32; 6] = [0, 1, 2, 0, 2, 3];
 
 pub fn load_square_buffer(context: &opengl::Context) -> Vertex {
     let mut vertex = Vertex::new(context);
-    vertex.new_buffer(|vbo| {
+    vertex.new_buffer(&context, |vbo| {
         vbo.bind(Target::Array);
         vbo.data(&SQUARE, Usage::StaticDraw);
 
         Buffer::gen_mark(&[(GlType::f32, 3); 2]);
     });
 
-    vertex.new_buffer(|ebo| {
+    vertex.new_buffer(&context, |ebo| {
         ebo.bind(Target::ElementArray);
         ebo.data(&SQUARE_INDICES, Usage::StaticDraw);
     });

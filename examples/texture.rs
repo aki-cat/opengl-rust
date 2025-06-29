@@ -30,13 +30,13 @@ pub fn load_shader(context: &opengl::Context, v_code: &str, f_code: &str) -> Pro
 pub fn load_buffer(context: &opengl::Context) -> Vertex {
     let mut vertex = Vertex::new(context);
 
-    vertex.new_buffer(|vbo| {
+    vertex.new_buffer(&context, |vbo| {
         vbo.bind(Target::Array);
         vbo.data(&IMAGE, Usage::StaticDraw);
         Buffer::gen_mark(&[(GlType::f32, 3), (GlType::f32, 2)]);
     });
 
-    vertex.new_buffer(|ebo| {
+    vertex.new_buffer(&context, |ebo| {
         ebo.bind(Target::ElementArray);
         ebo.data(&INDEICE, Usage::StaticDraw);
     });
