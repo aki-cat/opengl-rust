@@ -19,6 +19,12 @@ impl Texture {
         unsafe { gl::GenTextures(1, &mut id) };
         Self { id }
     }
+
+    pub fn using(&self, program: &crate::Program, uniform_name: &str) {
+        Texture::active(self.id);
+        self.bind(TexTarget::Tex2D);
+        program.set_uniform(uniform_name, &self.id).unwrap();
+    }
 }
 
 impl Drop for Texture {
