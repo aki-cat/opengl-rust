@@ -90,6 +90,12 @@ use mats::uniform::SetUniform;
 impl Program {
     #[inline]
     pub fn set_uniform<T: SetUniform>(&self, name: &str, value: &T) -> Result<(), String> {
+        let location = self.location(name)?;
+        value.give(location);
+        check_uniform_err()
+    }
+
+    fn location(&self, name: &str) -> Result<i32, String> {
         let name_ptr = match std::ffi::CString::new(name) {
             Ok(c_str) => c_str,
             Err(_) => return Err(format!("Invalid uniform name '{}'", name)),
@@ -98,7 +104,20 @@ impl Program {
         if location == -1 {
             return Err(format!("Uniform '{}' not found", name));
         }
-        value.give(location);
-        Ok(())
+        Ok(location)
     }
+}
+
+fn check_uniform_err() -> Result<(), String> {
+    let (err_enum, err) = unsafe {
+        let err_enum = gl::GetError();
+        match err_enum {
+            gl::NO_ERROR => return Ok(()),
+            gl::INVALID_ENUM => (err_enum, "GL_INVALID_ENUM"),
+            gl::INVALID_VALUE => (err_enum, "GL_INVALID_VALUE"),
+            gl::INVALID_OPERATION => (err_enum, "GL_INVALID_OPERATION"),
+            _ => (err_enum, "Unknown Error"),
+        }
+    };
+    Err(format!("Set Uniform Error: {}({})", err, err_enum))
 }
