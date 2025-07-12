@@ -103,6 +103,14 @@ impl Program {
         }
     }
 
+    pub fn set_uniform_vec2(&self, name: &str, value: &[f32; 2]) -> Result<(), String> {
+        let location = self.location(name)?;
+        unsafe {
+            gl::ProgramUniform2fv(self.program, location, 1, value.as_ptr());
+            check_uniform_err()
+        }
+    }
+
     fn location(&self, name: &str) -> Result<i32, String> {
         let name_ptr = match std::ffi::CString::new(name) {
             Ok(c_str) => c_str,
